@@ -1,3 +1,4 @@
+$KCODE = 'UTF8'
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 RAILS_ROOT = File.dirname(__FILE__)
 ENV["RAILS_ENV"] = "test"
@@ -26,3 +27,4 @@ class ActiveSupport::TestCase #:nodoc:
   
   fixtures :all
 end
+

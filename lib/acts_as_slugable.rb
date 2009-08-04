@@ -104,6 +104,9 @@ module Multiup
               #replace ampersand chars with 'and'
               proposed_slug = proposed_slug.gsub(/&/, 'and')
 
+              #normalize chars to ascii
+              proposed_slug = proposed_slug.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n, '').to_s
+
               #replace non-word chars with dashes
               proposed_slug = proposed_slug.gsub(/[\W^-_]+/, '-')
 

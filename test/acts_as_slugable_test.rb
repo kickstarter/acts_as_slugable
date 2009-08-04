@@ -82,7 +82,7 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
 
     assert_equal pg1.url_slug, pg2.url_slug
   end
-  
+
   def test_length
     ten = "1234567890"
     
@@ -91,6 +91,11 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
     
     pg2 = Page.create(:title => "b"*51)
     assert_equal 50, pg2.url_slug.length
+  end
+
+  def test_extended_characters
+    pg = Page.create(:title => "calcul√© en fran√ßaise")
+    assert_equal 'calcule-en-francaise', pg.url_slug
   end
 
   def test_converting_ampersands
@@ -106,7 +111,6 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
     check_for_allowable_characters "Title-with-dashes"
     check_for_allowable_characters "Title-with'-$#)(*%symbols"
     check_for_allowable_characters "/urltitle/"
-    check_for_allowable_characters "calculÈ en franÁaise"
   end
 
   private
