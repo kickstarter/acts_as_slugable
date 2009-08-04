@@ -82,6 +82,16 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
 
     assert_equal pg1.url_slug, pg2.url_slug
   end
+  
+  def test_length
+    ten = "1234567890"
+    
+    pg1 = Page.create(:title => "a"*50)
+    assert_equal 50, pg1.url_slug.length
+    
+    pg2 = Page.create(:title => "b"*51)
+    assert_equal 50, pg2.url_slug.length
+  end
 
   def test_converting_ampersands
     pg = Page.create(:title => "Test & test again")

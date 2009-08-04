@@ -22,8 +22,9 @@ module Multiup
         # * <tt>scope</tt> - Given a symbol, it'll attach "_id" and use that as the foreign key 
         #   restriction. It's also possible to give it an entire string that is interpolated if 
         #   you need a tighter scope than just a foreign key.
+        # * <tt>slug_length</tt> - specifies a maximum length for slugs, before any unique suffix is added.
         def acts_as_slugable(options = {})
-          configuration = { :source_column => 'name', :slug_column => 'url_slug', :scope => nil}
+          configuration = { :source_column => 'name', :slug_column => 'url_slug', :scope => nil, :slug_length => 50}
           configuration.update(options) if options.is_a?(Hash)
           
           configuration[:scope] = "#{configuration[:scope]}_id".intern if configuration[:scope].is_a?(Symbol) && configuration[:scope].to_s !~ /_id$/
@@ -59,6 +60,10 @@ module Multiup
               "#{configuration[:slug_column]}"
             end
             
+            def slug_length
+              #{configuration[:slug_length]}
+            end
+
             #{scope_condition_method}
           
             after_validation :create_slug
@@ -90,8 +95,11 @@ module Multiup
             if self[slug_column].to_s.empty?
               test_string = self[source_column]
 
+              #truncate to a a decent length
+              proposed_slug = test_string[0...self.slug_length].strip.downcase
+
               #strip out common punctuation
-              proposed_slug = test_string.strip.downcase.gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '')
+              proposed_slug = proposed_slug.gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '')
 
               #replace ampersand chars with 'and'
               proposed_slug = proposed_slug.gsub(/&/, 'and')
