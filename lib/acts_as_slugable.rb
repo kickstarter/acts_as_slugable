@@ -113,6 +113,9 @@ module Multiup
               #remove double dashes
               proposed_slug = proposed_slug.gsub(/\-{2}/, '-')
 
+              #removing leading and trailing dashes
+              proposed_slug = proposed_slug.gsub(/(^-|-$)/, '')
+
               suffix = ""
               existing = true
               acts_as_slugable_class.transaction do

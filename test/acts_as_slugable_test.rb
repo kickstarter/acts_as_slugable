@@ -103,6 +103,11 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
     assert pg.valid?
     assert_equal "test-and-test-again", pg.url_slug
   end
+  
+  def test_sandwiched_punctuation
+    pg = Page.create(:title => "!Test!")
+    assert_equal 'test', pg.url_slug
+  end
 
   def test_characters
     # should convert or replace all unusable characters
