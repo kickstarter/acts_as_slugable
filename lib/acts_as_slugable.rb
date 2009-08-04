@@ -96,25 +96,19 @@ module Multiup
               test_string = self[source_column]
 
               #truncate to a a decent length
-              proposed_slug = test_string[0...self.slug_length].strip.downcase
-
+              proposed_slug = test_string[0...self.slug_length].strip.downcase.
               #strip out common punctuation
-              proposed_slug = proposed_slug.gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '')
-
+                gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '').
               #replace ampersand chars with 'and'
-              proposed_slug = proposed_slug.gsub(/&/, 'and')
-
+                gsub(/&/, 'and').
               #normalize chars to ascii
-              proposed_slug = proposed_slug.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n, '').to_s
-
+                mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n, '').to_s.
               #replace non-word chars with dashes
-              proposed_slug = proposed_slug.gsub(/[\W^-_]+/, '-')
-
+                gsub(/[\W^-_]+/, '-').
               #remove double dashes
-              proposed_slug = proposed_slug.gsub(/\-{2}/, '-')
-
+                gsub(/\-{2}/, '-').
               #removing leading and trailing dashes
-              proposed_slug = proposed_slug.gsub(/(^-|-$)/, '')
+                gsub(/(^-|-$)/, '')
 
               suffix = ""
               existing = true
