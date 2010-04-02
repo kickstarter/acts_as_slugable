@@ -3,10 +3,6 @@ require File.dirname(__FILE__) + '/test_helper'
 require File.join(File.dirname(__FILE__), 'fixtures/page')
 
 class ActsAsSlugableTest < ActiveSupport::TestCase
-  def setup
-    @allowable_characters = Regexp.new("^[A-Za-z0-9_-]+$")
-  end
-
   def test_hooks_presence
     # after_validation callback hooks should exist
     assert Page.after_validation.include?(:create_slug)
@@ -82,41 +78,36 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
 
     assert_equal pg1.url_slug, pg2.url_slug
   end
+end
+
+class StringToSlugTest < ActiveSupport::TestCase
+  def setup
+    @allowable_characters = Regexp.new("^[A-Za-z0-9_-]+$")
+  end
 
   def test_length
-    ten = "1234567890"
-    
-    pg1 = Page.create(:title => "a"*50)
-    assert_equal 50, pg1.url_slug.length
-    
-    pg2 = Page.create(:title => "b"*51)
-    assert_equal 50, pg2.url_slug.length
+    assert_equal "aaa", "aaa".to_slug(:length => 3)
+    assert_equal "bbb", "bbbb".to_slug(:length => 3)
   end
 
   def test_extended_characters
-    pg = Page.create(:title => "calculé en française")
-    assert_equal 'calcule-en-francaise', pg.url_slug
+    assert_equal 'calcule-en-francaise', "calculé en française".to_slug
   end
 
   def test_length_with_utf8_characters_at_break_point
-    pg = Page.create(:title => "#{'h' * 48}’#{'h' * 20}")
-    assert_equal 50, pg.url_slug.length
+    assert_equal "aaah", "aaa’hhh".to_slug(:length => 4)
   end
 
   def test_converting_ampersands
-    pg = Page.create(:title => "Test & test again")
-    assert pg.valid?
-    assert_equal "test-and-test-again", pg.url_slug
+    assert_equal "test-and-test-again", "Test & test again".to_slug
   end
   
   def test_converting_ampersands_in_long_strings
-    pg = Page.create(:title => "#{'a' * 25} & #{'a' * 25}")
-    assert_equal 50, pg.url_slug.length
+    assert_equal "aaa-and-b", "aaa & bbb".to_slug(:length => 9)
   end
   
   def test_sandwiched_punctuation
-    pg = Page.create(:title => "!Test!")
-    assert_equal 'test', pg.url_slug
+    assert_equal 'test', "!Test!".to_slug
   end
 
   def test_characters
@@ -129,9 +120,7 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
   end
 
   private
-    def check_for_allowable_characters(title)
-      pg = Page.create(:title => title)
-      assert pg.valid?
-      assert_match @allowable_characters, pg.url_slug  
+    def check_for_allowable_characters(str)
+      assert_match @allowable_characters, str.to_slug  
     end
 end
