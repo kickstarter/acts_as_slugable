@@ -95,20 +95,20 @@ module Multiup
             if self[slug_column].to_s.empty?
               test_string = self[source_column]
 
-              #truncate to a a decent length
-              proposed_slug = test_string[0...self.slug_length].strip.downcase.
+              #normalize chars to ascii
+              proposed_slug = test_string.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n, '').to_s.
               #strip out common punctuation
                 gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '').
               #replace ampersand chars with 'and'
                 gsub(/&/, 'and').
-              #normalize chars to ascii
-                mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n, '').to_s.
               #replace non-word chars with dashes
                 gsub(/[\W^-_]+/, '-').
               #remove double dashes
                 gsub(/\-{2}/, '-').
               #removing leading and trailing dashes
-                gsub(/(^-|-$)/, '')
+                gsub(/(^-|-$)/, '').
+              #truncate to a a decent length
+                slice(0...self.slug_length).strip.downcase
 
               suffix = ""
               existing = true

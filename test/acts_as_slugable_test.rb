@@ -98,10 +98,20 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
     assert_equal 'calcule-en-francaise', pg.url_slug
   end
 
+  def test_length_with_utf8_characters_at_break_point
+    pg = Page.create(:title => "#{'h' * 48}’#{'h' * 20}")
+    assert_equal 50, pg.url_slug.length
+  end
+
   def test_converting_ampersands
     pg = Page.create(:title => "Test & test again")
     assert pg.valid?
     assert_equal "test-and-test-again", pg.url_slug
+  end
+  
+  def test_converting_ampersands_in_long_strings
+    pg = Page.create(:title => "#{'a' * 25} & #{'a' * 25}")
+    assert_equal 50, pg.url_slug.length
   end
   
   def test_sandwiched_punctuation
