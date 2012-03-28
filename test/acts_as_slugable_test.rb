@@ -5,8 +5,10 @@ require File.join(File.dirname(__FILE__), 'fixtures/page')
 class ActsAsSlugableTest < ActiveSupport::TestCase
   def test_hooks_presence
     # after_validation callback hooks should exist
-    assert Page.after_validation.include?(:create_slug)
-    assert Page.after_validation.include?(:create_slug)
+    callbacks = Page._validation_callbacks.select { |c| 
+      c.kind == :after and c.filter == :create_slug 
+    }
+    assert_equal 1, callbacks.size
   end
 
   def test_create
@@ -25,12 +27,12 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
     # create, with nil title
     pg = Page.create(:title => nil)
     assert !pg.valid?
-    assert pg.errors.on(:title)
+    assert pg.errors[:title]
 
     # create, with blank title
     pg = Page.create(:title => '')
     assert !pg.valid?
-    assert pg.errors.on(:title)
+    assert pg.errors[:title]
   end
 
   def test_update

@@ -1,27 +1,5 @@
+require 'string'
 require 'active_record'
-
-class String
-  def to_slug(options = {})
-    options[:length] ||= 50
-
-    #normalize chars to ascii
-    self.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n, '').to_s.downcase.
-      #strip out common punctuation
-      gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '').
-      #replace ampersand chars with 'and'
-      gsub(/&/, 'and').
-      #replace non-word chars with dashes
-      gsub(/[\W^-_]+/, '-').
-      #remove double dashes
-      gsub(/\-{2}/, '-').
-      #removing leading dashes
-      gsub(/^-/, '').
-      #truncate to a a decent length
-      slice(0...options[:length]).
-      #remove trailing dashes and whitespace
-      gsub(/[-\s]*$/, '')
-  end
-end
 
 module Multiup
   module Acts #:nodoc:
@@ -109,7 +87,7 @@ module Multiup
           #    d. Check if the slug is unique and, if not, append a number until it is
           #    e. Save the URL slug      
           def create_slug
-            return if self.errors.length > 0
+            return if self.errors.size > 0
             return if self[source_column].blank?
 
             if self[slug_column].to_s.empty?
@@ -120,13 +98,11 @@ module Multiup
               acts_as_slugable_class.transaction do
                 while existing != nil
                   # look for records with the same url slug and increment a counter until we find a unique slug
-                  existing = acts_as_slugable_class.find(:first, :conditions => ["#{slug_column} = ? and #{slug_scope_condition}",  proposed_slug + suffix])
+                  existing = acts_as_slugable_class.
+                    where(slug_column => proposed_slug + suffix).
+                    where(slug_scope_condition).first
                   if existing
-                    if suffix.empty?
-                      suffix = "-0"
-                    else
-                      suffix.succ!
-                    end
+                    suffix = suffix.empty? ? "-0" : suffix.succ
                   end
                 end
               end # end of transaction         
@@ -138,6 +114,4 @@ module Multiup
   end
 end
 
-ActiveRecord::Base.class_eval do
-  include Multiup::Acts::Slugable
-end
+::ActiveRecord::Base.send :include, Multiup::Acts::Slugable
