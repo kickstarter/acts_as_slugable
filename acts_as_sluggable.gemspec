@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.name        = "acts_as_sluggable"
   s.version     = "1.0"
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["lance@kickstarter.com"]
+  s.authors     = ["Alex Dunae", "Lance Ivy"]
   s.email       = ["lance@kickstarter.com"]
   s.homepage    = "https://github.com/kickstarter/acts_as_sluggable"
   s.summary     = "acts_as_sluggable, forked and updated"

@@ -14,7 +14,7 @@ module Multiup
         # Generates a URL slug based on provided fields and adds <tt>after_validation</tt> callbacks.
         #
         #   class Page < ActiveRecord::Base
-        #     acts_as_slugable :source_column => :title, :target_column => :url_slug, :scope => :parent
+        #     acts_as_slugable :source_column => :title, :slug_column => :slug, :scope => :parent
         #   end
         #
         # Configuration options:
@@ -25,7 +25,7 @@ module Multiup
         #   you need a tighter scope than just a foreign key.
         # * <tt>slug_length</tt> - specifies a maximum length for slugs, before any unique suffix is added.
         def acts_as_slugable(options = {})
-          configuration = { :source_column => 'name', :slug_column => 'url_slug', :scope => nil, :slug_length => 50}
+          configuration = { :source_column => 'name', :slug_column => 'slug', :scope => nil, :slug_length => 50}
           configuration.update(options) if options.is_a?(Hash)
           
           configuration[:scope] = "#{configuration[:scope]}_id".intern if configuration[:scope].is_a?(Symbol) && configuration[:scope].to_s !~ /_id$/
@@ -80,7 +80,7 @@ module Multiup
           # The steps are roughly as follows
           # 1. If the record hasn't passed its validations, exit immediately
           # 2. If the <tt>source_column</tt> is empty, exit immediately (no error is thrown - this should be checked with your own validation)
-          # 3. If the <tt>url_slug</tt> is already set we have nothing to do, otherwise
+          # 3. If the <tt>slug</tt> is already set we have nothing to do, otherwise
           #    a. Strip out punctuation
           #    b. Replace unusable characters with dashes
           #    c. Clean up any doubled up dashes

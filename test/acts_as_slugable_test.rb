@@ -15,12 +15,12 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
     # create, with title
     pg = Page.create(:title => "New page")
     assert pg.valid?
-    assert_equal "new-page", pg.url_slug
+    assert_equal "new-page", pg.slug
 
-    # create, with title and url_slug
-    pg = Page.create(:title => "Test overrride", :parent_id => nil, :url_slug => "something-different")
+    # create, with title and slug
+    pg = Page.create(:title => "Test overrride", :parent_id => nil, :slug => "something-different")
     assert pg.valid?
-    assert_equal "something-different", pg.url_slug
+    assert_equal "something-different", pg.slug
   end
 
   def test_model_still_runs_validations
@@ -38,19 +38,19 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
   def test_update
     pg = Page.create(:title => "Original page")
     assert pg.valid?
-    assert_equal "original-page", pg.url_slug
+    assert_equal "original-page", pg.slug
 
     # update, with title
     pg.update_attribute(:title, "Updated title only")
-    assert_equal "original-page", pg.url_slug
+    assert_equal "original-page", pg.slug
 
     # update, with title and nil slug
-    pg.update_attributes(:title => "Updated title and slug to nil", :url_slug => nil)
-    assert_equal "updated-title-and-slug-to-nil", pg.url_slug
+    pg.update_attributes(:title => "Updated title and slug to nil", :slug => nil)
+    assert_equal "updated-title-and-slug-to-nil", pg.slug
 
     # update, with empty slug
-    pg.update_attributes(:title => "Updated title and slug to empty", :url_slug => '')
-    assert_equal "updated-title-and-slug-to-empty", pg.url_slug
+    pg.update_attributes(:title => "Updated title and slug to empty", :slug => '')
+    assert_equal "updated-title-and-slug-to-empty", pg.slug
   end
 
   def test_uniqueness
@@ -64,7 +64,7 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
     pg2 = Page.create(:title => t, :parent_id => 1)
     assert pg2.valid?
 
-    assert_not_equal pg1.url_slug, pg2.url_slug
+    assert_not_equal pg1.slug, pg2.slug
   end
 
   def test_scope
@@ -78,7 +78,7 @@ class ActsAsSlugableTest < ActiveSupport::TestCase
     pg2 = Page.create(:title => t, :parent_id => 2)
     assert pg2.valid?
 
-    assert_equal pg1.url_slug, pg2.url_slug
+    assert_equal pg1.slug, pg2.slug
   end
 end
 

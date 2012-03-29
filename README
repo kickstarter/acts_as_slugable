@@ -10,29 +10,30 @@ URL slugs are unique within the specified scope (or all records if no scope is d
 
 
 == Installation
-<tt>./script/plugin install http://code.dunae.ca/acts_as_slugable</tt>
 
+Add to your Gemfile:
+
+    gem 'paranoia'
 
 == Usage examples
 
 In your target table, add a column to hold the URL slug.
 
-
 === With scope
 
   class Page < ActiveRecord::Base
-    acts_as_slugable :source_column => :title, :target_column => :url_slug, :scope => :parent
+    acts_as_slugable :source_column => :title, :slug_column => :slug, :scope => :parent
   end
 
 === Without scope
 
   class Post < ActiveRecord::Base
-    acts_as_slugable :source_column => :title, :target_column => :url_slug
+    acts_as_slugable :source_column => :title, :slug_column => :slug
   end
 
 ===  A sample link
 
-  link_to @page.title, :action => 'show', :url_slug => @page.url_slug
+  link_to @page.title, :action => 'show', :slug => @page.slug
 
 
 == Testing
