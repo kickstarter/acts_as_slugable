@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.version     = "1.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Alex Dunae", "Lance Ivy"]
-  s.email       = ["lance@kickstarter.com"]
+  s.email       = ["?", "lance@kickstarter.com"]
   s.homepage    = "https://github.com/kickstarter/acts_as_slugable"
   s.summary     = "acts_as_slugable, forked and updated"
   s.description = "acts_as_slugable, forked and updated"
