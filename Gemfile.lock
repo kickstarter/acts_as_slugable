@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    acts_as_sluggable (1.0)
+    acts_as_slugable (1.0)
       activerecord (>= 3.0.0)
 
 GEM
@@ -30,7 +30,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acts_as_sluggable!
+  acts_as_slugable!
   bundler (>= 1.0.0)
   rake (= 0.8.7)
   sqlite3
