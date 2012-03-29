@@ -13,7 +13,8 @@ URL slugs are unique within the specified scope (or all records if no scope is d
 
 Add to your Gemfile:
 
-    gem 'paranoia'
+    gem 'acts_as_slugable', :git => 'git@github.com:kickstarter/acts_as_sluggable.git'
+
 
 == Usage examples
 
