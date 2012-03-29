@@ -36,6 +36,25 @@ In your target table, add a column to hold the URL slug.
 
   link_to @page.title, :action => 'show', :slug => @page.slug
 
+=== Example usage
+
+  # app/models/page.rb
+  class Page
+    def to_param
+      slug
+    end
+  end
+
+  # config/routes.rb
+  resources :pages
+
+  # app/controllers/pages_controller.rb
+  def index
+    @page = Page.create(:name => "my page")
+  end
+
+  # app/views/pages/index.html.erb
+  <%= url_for @page # generates "/pages/my-page" %>
 
 == Testing
 
