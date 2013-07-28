@@ -5,7 +5,7 @@ module ActsAsSluggable
     @defaults ||= {
       :source_column => 'name',
       :slug_column => 'slug',
-      :scope => "1 = 1",
+      :scope => nil,
       :slug_length => 50
     }
   end
@@ -70,13 +70,12 @@ module ActsAsSluggable
       acts_as_sluggable_config[:slug_length]
     end
 
-    def slug_scope_condition
-      scope = acts_as_sluggable_config[:scope]
-
-      if scope.is_a?(Symbol)
-        {scope => send(scope)}
+    def slug_scope
+      if scope = acts_as_sluggable_config[:scope]
+        scope = {scope => send(scope)} if scope.is_a? Symbol
+        self.class.where(scope)
       else
-        scope
+        self.class
       end
     end
 
@@ -91,21 +90,14 @@ module ActsAsSluggable
       end
 
       def generate_slug
-        proposed_slug = ActsAsSluggable.slug(self[source_column], :length => slug_length)
+        slug = ActsAsSluggable.slug(self[source_column], :length => slug_length)
 
         suffix = ""
-        existing = true
-        while existing != nil
-          # look for records with the same url slug and increment a counter until we find a unique slug
-          existing = self.class.
-            where(slug_column => proposed_slug + suffix).
-            where(slug_scope_condition).first
-          if existing
-            suffix = suffix.empty? ? "-0" : suffix.succ
-          end
+        while slug_scope.where(slug_column => slug + suffix).first
+          suffix = suffix.empty? ? "-0" : suffix.succ
         end
 
-        proposed_slug + suffix
+        slug + suffix
       end
   end
 end
