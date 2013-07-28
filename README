@@ -1,4 +1,4 @@
-= Acts as slugable readme
+= Acts as Sluggable readme
 
 Generates a URL slug based on a specific fields (e.g. title).
 
@@ -13,7 +13,7 @@ URL slugs are unique within the specified scope (or all records if no scope is d
 
 Add to your Gemfile:
 
-    gem 'acts_as_slugable', :git => 'git@github.com:kickstarter/acts_as_slugable.git'
+    gem 'acts_as_sluggable', :git => 'git@github.com:cainlevy/acts_as_sluggable.git'
 
 
 == Usage examples
@@ -23,13 +23,13 @@ In your target table, add a column to hold the URL slug.
 === With scope
 
   class Page < ActiveRecord::Base
-    acts_as_slugable :source_column => :title, :slug_column => :slug, :scope => :parent
+    acts_as_sluggable :source_column => :title, :slug_column => :slug, :scope => :parent
   end
 
 === Without scope
 
   class Post < ActiveRecord::Base
-    acts_as_slugable :source_column => :title, :slug_column => :slug
+    acts_as_sluggable :source_column => :title, :slug_column => :slug
   end
 
 ===  A sample link

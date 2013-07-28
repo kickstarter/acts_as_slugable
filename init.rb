@@ -1,1 +1,1 @@
-require 'acts_as_slugable'
+require 'acts_as_sluggable'

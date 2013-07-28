@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/test_helper'
 
 require File.join(File.dirname(__FILE__), 'fixtures/page')
 
-class ActsAsSlugableTest < ActiveSupport::TestCase
+class ActsAsSluggableTest < ActiveSupport::TestCase
   def test_hooks_presence
     # after_validation callback hooks should exist
     callbacks = Page._validation_callbacks.select { |c|

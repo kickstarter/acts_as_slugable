@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
-  s.name        = "acts_as_slugable"
+  s.name        = "acts_as_sluggable"
   s.version     = "1.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Alex Dunae", "Lance Ivy"]
   s.email       = ["?", "lance@kickstarter.com"]
-  s.homepage    = "https://github.com/kickstarter/acts_as_slugable"
-  s.summary     = "acts_as_slugable, forked and updated"
-  s.description = "acts_as_slugable, forked and updated"
+  s.homepage    = "https://github.com/cainlevy/acts_as_sluggable"
+  s.summary     = "acts_as_sluggable, modernized"
+  s.description = "acts_as_sluggable, modernized"
 
   s.add_dependency "activerecord", ">= 3.0.0"
 

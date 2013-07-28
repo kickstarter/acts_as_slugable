@@ -25,7 +25,7 @@ end
 
 module Multiup
   module Acts #:nodoc:
-    module Slugable #:nodoc:
+    module Sluggable #:nodoc:
 
       def self.append_features(base)
         super
@@ -36,7 +36,7 @@ module Multiup
         # Generates a URL slug based on provided fields and adds <tt>after_validation</tt> callbacks.
         #
         #   class Page < ActiveRecord::Base
-        #     acts_as_slugable :source_column => :title, :slug_column => :slug, :scope => :parent
+        #     acts_as_sluggable :source_column => :title, :slug_column => :slug, :scope => :parent
         #   end
         #
         # Configuration options:
@@ -46,7 +46,7 @@ module Multiup
         #   restriction. It's also possible to give it an entire string that is interpolated if
         #   you need a tighter scope than just a foreign key.
         # * <tt>slug_length</tt> - specifies a maximum length for slugs, before any unique suffix is added.
-        def acts_as_slugable(options = {})
+        def acts_as_sluggable(options = {})
           configuration = { :source_column => 'name', :slug_column => 'slug', :scope => nil, :slug_length => 50}
           configuration.update(options) if options.is_a?(Hash)
 
@@ -69,9 +69,9 @@ module Multiup
           end
 
           class_eval <<-EOV
-            include Multiup::Acts::Slugable::InstanceMethods
+            include Multiup::Acts::Sluggable::InstanceMethods
 
-            def acts_as_slugable_class
+            def acts_as_sluggable_class
               ::#{self.name}
             end
 
@@ -117,10 +117,10 @@ module Multiup
 
               suffix = ""
               existing = true
-              acts_as_slugable_class.transaction do
+              acts_as_sluggable_class.transaction do
                 while existing != nil
                   # look for records with the same url slug and increment a counter until we find a unique slug
-                  existing = acts_as_slugable_class.
+                  existing = acts_as_sluggable_class.
                     where(slug_column => proposed_slug + suffix).
                     where(slug_scope_condition).first
                   if existing
@@ -136,4 +136,4 @@ module Multiup
   end
 end
 
-::ActiveRecord::Base.send :include, Multiup::Acts::Slugable
+::ActiveRecord::Base.send :include, Multiup::Acts::Sluggable
