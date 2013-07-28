@@ -91,15 +91,13 @@ module ActsAsSluggable
 
         suffix = ""
         existing = true
-        transaction do
-          while existing != nil
-            # look for records with the same url slug and increment a counter until we find a unique slug
-            existing = self.class.
-              where(slug_column => proposed_slug + suffix).
-              where(slug_scope_condition).first
-            if existing
-              suffix = suffix.empty? ? "-0" : suffix.succ
-            end
+        while existing != nil
+          # look for records with the same url slug and increment a counter until we find a unique slug
+          existing = self.class.
+            where(slug_column => proposed_slug + suffix).
+            where(slug_scope_condition).first
+          if existing
+            suffix = suffix.empty? ? "-0" : suffix.succ
           end
         end
         self[slug_column] = proposed_slug + suffix
