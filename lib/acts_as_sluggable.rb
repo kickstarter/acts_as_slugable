@@ -31,7 +31,6 @@ module ActsAsSluggable
       gsub(/[-\s]*$/, '')
   end
 
-
   # Generates a URL slug based on provided fields and adds <tt>after_validation</tt> callbacks.
   #
   #   class Page < ActiveRecord::Base
@@ -83,39 +82,28 @@ module ActsAsSluggable
 
     private
 
-      # URL slug creation logic
-      #
-      # The steps are roughly as follows
-      # 1. If the record hasn't passed its validations, exit immediately
-      # 2. If the <tt>source_column</tt> is empty, exit immediately (no error is thrown - this should be checked with your own validation)
-      # 3. If the <tt>slug</tt> is already set we have nothing to do, otherwise
-      #    a. Strip out punctuation
-      #    b. Replace unusable characters with dashes
-      #    c. Clean up any doubled up dashes
-      #    d. Check if the slug is unique and, if not, append a number until it is
-      #    e. Save the URL slug
       def create_slug
         return if self.errors.size > 0
         return if self[source_column].blank?
+        return if self[slug_column].to_s.present?
 
-        if self[slug_column].to_s.empty?
-          proposed_slug = ActsAsSluggable.slug(self[source_column], :length => slug_length)
+        proposed_slug = ActsAsSluggable.slug(self[source_column], :length => slug_length)
 
-          suffix = ""
-          existing = true
-          transaction do
-            while existing != nil
-              # look for records with the same url slug and increment a counter until we find a unique slug
-              existing = self.class.
-                where(slug_column => proposed_slug + suffix).
-                where(slug_scope_condition).first
-              if existing
-                suffix = suffix.empty? ? "-0" : suffix.succ
-              end
+        suffix = ""
+        existing = true
+        transaction do
+          while existing != nil
+            # look for records with the same url slug and increment a counter until we find a unique slug
+            existing = self.class.
+              where(slug_column => proposed_slug + suffix).
+              where(slug_scope_condition).first
+            if existing
+              suffix = suffix.empty? ? "-0" : suffix.succ
             end
-          end # end of transaction
-          self[slug_column] = proposed_slug + suffix
+          end
         end
+        self[slug_column] = proposed_slug + suffix
+      end
     end
   end
 end
