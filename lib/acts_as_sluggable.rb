@@ -19,13 +19,11 @@ module ActsAsSluggable
   # Configuration options:
   # * <tt>source_column</tt> - specifies the column name used to generate the URL slug
   # * <tt>slug_column</tt> - specifies the column name used to store the URL slug
-  # * <tt>scope</tt> - Given a symbol, it'll attach "_id" and use that as the foreign key
-  #   restriction. It's also possible to give it an entire string that is interpolated if
-  #   you need a tighter scope than just a foreign key.
+  # * <tt>scope</tt> - as a string, specifies a literal SQL restriction. as a symbol, names a column
+  #   that must not also match.
   # * <tt>slug_length</tt> - specifies a maximum length for slugs, before any unique suffix is added.
   def acts_as_sluggable(options = {})
     configuration = ActsAsSluggable.defaults.merge(options)
-    configuration[:scope] = "#{configuration[:scope]}_id".intern if configuration[:scope].is_a?(Symbol) && configuration[:scope].to_s !~ /_id$/
 
     define_method(:acts_as_sluggable_config) do
       configuration
