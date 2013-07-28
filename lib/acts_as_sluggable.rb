@@ -6,7 +6,8 @@ module ActsAsSluggable
       :source_column => 'name',
       :slug_column => 'slug',
       :scope => nil,
-      :slug_length => 50
+      :slug_length => 50,
+      :when => proc{|r| true }
     }
   end
 
@@ -22,6 +23,7 @@ module ActsAsSluggable
   # * <tt>scope</tt> - as a string, specifies a literal SQL restriction. as a symbol, names a column
   #   that must not also match.
   # * <tt>slug_length</tt> - specifies a maximum length for slugs, before any unique suffix is added.
+  # * <tt>when</tt> - a block that should return false until the object is ready for a slug. good for drafts.
   def acts_as_sluggable(options = {})
     configuration = ActsAsSluggable.defaults.merge(options)
 
@@ -83,6 +85,7 @@ module ActsAsSluggable
       return if self.errors.size > 0
       return if self[slug_source].blank?
       return if self[slug_column].to_s.present?
+      return unless acts_as_sluggable_config[:when].call(self)
 
       self[slug_column] = generate_slug
     end

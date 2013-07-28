@@ -81,6 +81,11 @@ class ActsAsSluggableTest < ActiveSupport::TestCase
 
     assert_equal pg1.slug, pg2.slug
   end
+
+  def test_draft
+    pg = Page.create(:title => "Draft", :draft => 1)
+    assert_equal nil, pg.slug
+  end
 end
 
 class StringToSlugTest < ActiveSupport::TestCase
