@@ -1,6 +1,15 @@
 require 'active_record'
 
 module ActsAsSluggable
+  def self.defaults
+    @defaults ||= {
+      :source_column => 'name',
+      :slug_column => 'slug',
+      :scope => nil,
+      :slug_length => 50
+    }
+  end
+
   def self.slug(str, options = {})
     options[:length] ||= 50
 
@@ -42,8 +51,7 @@ module ActsAsSluggable
     #   you need a tighter scope than just a foreign key.
     # * <tt>slug_length</tt> - specifies a maximum length for slugs, before any unique suffix is added.
     def acts_as_sluggable(options = {})
-      configuration = { :source_column => 'name', :slug_column => 'slug', :scope => nil, :slug_length => 50}
-      configuration.update(options) if options.is_a?(Hash)
+      configuration = ActsAsSluggable.defaults.merge(options)
 
       configuration[:scope] = "#{configuration[:scope]}_id".intern if configuration[:scope].is_a?(Symbol) && configuration[:scope].to_s !~ /_id$/
 
