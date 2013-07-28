@@ -10,27 +10,6 @@ module ActsAsSluggable
     }
   end
 
-  def self.slug(str, options = {})
-    options[:length] ||= 50
-
-    #normalize chars to ascii
-    str.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/, '').to_s.downcase.
-      #strip out common punctuation
-      gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '').
-      #replace ampersand chars with 'and'
-      gsub(/&/, 'and').
-      #replace non-word chars with dashes
-      gsub(/[\W^-_]+/, '-').
-      #remove double dashes
-      gsub(/\-{2}/, '-').
-      #removing leading dashes
-      gsub(/^-/, '').
-      #truncate to a decent length
-      slice(0...options[:length]).
-      #remove trailing dashes and whitespace
-      gsub(/[-\s]*$/, '')
-  end
-
   # Generates a URL slug based on provided fields and adds <tt>after_validation</tt> callbacks.
   #
   #   class Page < ActiveRecord::Base
@@ -57,6 +36,27 @@ module ActsAsSluggable
     after_validation :set_slug
   end
 
+  def self.slug(str, options = {})
+    options[:length] ||= 50
+
+    #normalize chars to ascii
+    str.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/, '').to_s.downcase.
+      #strip out common punctuation
+      gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '').
+      #replace ampersand chars with 'and'
+      gsub(/&/, 'and').
+      #replace non-word chars with dashes
+      gsub(/[\W^-_]+/, '-').
+      #remove double dashes
+      gsub(/\-{2}/, '-').
+      #removing leading dashes
+      gsub(/^-/, '').
+      #truncate to a decent length
+      slice(0...options[:length]).
+      #remove trailing dashes and whitespace
+      gsub(/[-\s]*$/, '')
+  end
+
   module InstanceMethods
     def slug_source
       acts_as_sluggable_config[:source_column]
@@ -81,24 +81,24 @@ module ActsAsSluggable
 
     private
 
-      def set_slug
-        return if self.errors.size > 0
-        return if self[slug_source].blank?
-        return if self[slug_column].to_s.present?
+    def set_slug
+      return if self.errors.size > 0
+      return if self[slug_source].blank?
+      return if self[slug_column].to_s.present?
 
-        self[slug_column] = generate_slug
+      self[slug_column] = generate_slug
+    end
+
+    def generate_slug
+      slug = ActsAsSluggable.slug(self[slug_source], :length => slug_length)
+
+      suffix = ""
+      while slug_scope.where(slug_column => slug + suffix).first
+        suffix = suffix.empty? ? "-0" : suffix.succ
       end
 
-      def generate_slug
-        slug = ActsAsSluggable.slug(self[slug_source], :length => slug_length)
-
-        suffix = ""
-        while slug_scope.where(slug_column => slug + suffix).first
-          suffix = suffix.empty? ? "-0" : suffix.succ
-        end
-
-        slug + suffix
-      end
+      slug + suffix
+    end
   end
 end
 
