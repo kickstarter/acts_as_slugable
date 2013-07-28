@@ -19,11 +19,11 @@ $LOAD_PATH.unshift(File.dirname(__FILE__) + "/fixtures/")
 
 class ActiveSupport::TestCase #:nodoc:
   include ActiveRecord::TestFixtures
-  
+
   self.fixture_path = File.dirname(__FILE__) + '/fixtures/'
   self.use_transactional_fixtures = true
   self.use_instantiated_fixtures  = false
-  
+
   fixtures :all
 end
 

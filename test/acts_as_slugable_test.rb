@@ -6,8 +6,8 @@ require File.join(File.dirname(__FILE__), 'fixtures/page')
 class ActsAsSlugableTest < ActiveSupport::TestCase
   def test_hooks_presence
     # after_validation callback hooks should exist
-    callbacks = Page._validation_callbacks.select { |c| 
-      c.kind == :after and c.filter == :create_slug 
+    callbacks = Page._validation_callbacks.select { |c|
+      c.kind == :after and c.filter == :create_slug
     }
     assert_equal 1, callbacks.size
   end
