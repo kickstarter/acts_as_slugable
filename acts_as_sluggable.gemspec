@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name        = "acts_as_sluggable"
-  s.version     = "1.0"
+  s.version     = "2.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Alex Dunae", "Lance Ivy"]
   s.email       = ["?", "lance@kickstarter.com"]
