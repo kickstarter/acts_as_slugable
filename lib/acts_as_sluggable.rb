@@ -58,7 +58,7 @@ module ActsAsSluggable
   end
 
   module InstanceMethods
-    def source_column
+    def slug_source
       acts_as_sluggable_config[:source_column]
     end
 
@@ -83,14 +83,14 @@ module ActsAsSluggable
 
       def set_slug
         return if self.errors.size > 0
-        return if self[source_column].blank?
+        return if self[slug_source].blank?
         return if self[slug_column].to_s.present?
 
         self[slug_column] = generate_slug
       end
 
       def generate_slug
-        slug = ActsAsSluggable.slug(self[source_column], :length => slug_length)
+        slug = ActsAsSluggable.slug(self[slug_source], :length => slug_length)
 
         suffix = ""
         while slug_scope.where(slug_column => slug + suffix).first
