@@ -54,7 +54,7 @@ module ActsAsSluggable
 
     include ActsAsSluggable::InstanceMethods
 
-    after_validation :create_slug
+    after_validation :set_slug
   end
 
   module InstanceMethods
@@ -82,11 +82,15 @@ module ActsAsSluggable
 
     private
 
-      def create_slug
+      def set_slug
         return if self.errors.size > 0
         return if self[source_column].blank?
         return if self[slug_column].to_s.present?
 
+        self[slug_column] = generate_slug
+      end
+
+      def generate_slug
         proposed_slug = ActsAsSluggable.slug(self[source_column], :length => slug_length)
 
         suffix = ""
@@ -100,9 +104,9 @@ module ActsAsSluggable
             suffix = suffix.empty? ? "-0" : suffix.succ
           end
         end
-        self[slug_column] = proposed_slug + suffix
+
+        proposed_slug + suffix
       end
-    end
   end
 end
 

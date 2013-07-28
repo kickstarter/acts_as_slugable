@@ -7,7 +7,7 @@ class ActsAsSluggableTest < ActiveSupport::TestCase
   def test_hooks_presence
     # after_validation callback hooks should exist
     callbacks = Page._validation_callbacks.select { |c|
-      c.kind == :after and c.filter == :create_slug
+      c.kind == :after and c.filter == :set_slug
     }
     assert_equal 1, callbacks.size
   end
