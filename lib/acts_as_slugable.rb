@@ -5,7 +5,7 @@ class String
     options[:length] ||= 50
 
     #normalize chars to ascii
-    self.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/n, '').to_s.downcase.
+    self.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/, '').to_s.downcase.
       #strip out common punctuation
       gsub(/[\'\"\#\$\,\.\!\?\%\@\(\)]+/, '').
       #replace ampersand chars with 'and'
