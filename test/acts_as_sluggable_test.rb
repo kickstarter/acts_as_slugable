@@ -89,28 +89,28 @@ class StringToSlugTest < ActiveSupport::TestCase
   end
 
   def test_length
-    assert_equal "aaa", Multiup::Acts::Sluggable.slug("aaa", :length => 3)
-    assert_equal "bbb", Multiup::Acts::Sluggable.slug("bbbb", :length => 3)
+    assert_equal "aaa", ActsAsSluggable.slug("aaa", :length => 3)
+    assert_equal "bbb", ActsAsSluggable.slug("bbbb", :length => 3)
   end
 
   def test_extended_characters
-    assert_equal 'calcule-en-francaise', Multiup::Acts::Sluggable.slug("calculé en française")
+    assert_equal 'calcule-en-francaise', ActsAsSluggable.slug("calculé en française")
   end
 
   def test_length_with_utf8_characters_at_break_point
-    assert_equal "aaah", Multiup::Acts::Sluggable.slug("aaa’hhh", :length => 4)
+    assert_equal "aaah", ActsAsSluggable.slug("aaa’hhh", :length => 4)
   end
 
   def test_converting_ampersands
-    assert_equal "test-and-test-again", Multiup::Acts::Sluggable.slug("Test & test again")
+    assert_equal "test-and-test-again", ActsAsSluggable.slug("Test & test again")
   end
 
   def test_converting_ampersands_in_long_strings
-    assert_equal "aaa-and-b", Multiup::Acts::Sluggable.slug("aaa & bbb", :length => 9)
+    assert_equal "aaa-and-b", ActsAsSluggable.slug("aaa & bbb", :length => 9)
   end
 
   def test_sandwiched_punctuation
-    assert_equal 'test', Multiup::Acts::Sluggable.slug("!Test!")
+    assert_equal 'test', ActsAsSluggable.slug("!Test!")
   end
 
   def test_characters
@@ -124,6 +124,6 @@ class StringToSlugTest < ActiveSupport::TestCase
 
   private
     def check_for_allowable_characters(str)
-      assert_match @allowable_characters, Multiup::Acts::Sluggable.slug(str)
+      assert_match @allowable_characters, ActsAsSluggable.slug(str)
     end
 end
