@@ -63,7 +63,7 @@ In your target table, add a column to hold the URL slug.
 
 The unit tests for this plugin use an in-memory [sqlite3 database](http://www.sqlite.org/).
 
-To execute the unit tests run the default rake task (<tt>rake</tt>). To execute the unit tests but preserve to debug log run **rake test**.
+To execute the unit tests run the default rake task (**rake**). To execute the unit tests but preserve to debug log run **rake test**.
 
 ## Credits
 
