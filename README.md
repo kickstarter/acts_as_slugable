@@ -21,23 +21,26 @@ Add to your Gemfile:
 In your target table, add a column to hold the URL slug.
 
 ### With scope
-
+```
   class Page < ActiveRecord::Base
     acts_as_slugable :source_column => :title, :slug_column => :slug, :scope => :parent
   end
+```  
 
 ### Without scope
-
+```
   class Post < ActiveRecord::Base
     acts_as_slugable :source_column => :title, :slug_column => :slug
   end
+```
 
 ###  A sample link
 
-  link_to @page.title, :action => 'show', :slug => @page.slug
+  ```link_to @page.title, :action => 'show', :slug => @page.slug```
 
-=== Example usage
+### Example usage
 
+  ```
   # app/models/page.rb
   class Page
     def to_param
@@ -55,7 +58,7 @@ In your target table, add a column to hold the URL slug.
 
   # app/views/pages/index.html.erb
   <%= url_for @page # generates "/pages/my-page" %>
-
+```
 ## Testing
 
 The unit tests for this plugin use an in-memory sqlite3 database (http://www.sqlite.org/).
